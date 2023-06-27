@@ -27,6 +27,8 @@ interface Pos {
     fun startEmvProcess()
 
     fun printReceipt()
+
+    fun selectApplicationPosition(index: Int)
 }
 
 fun main(){
