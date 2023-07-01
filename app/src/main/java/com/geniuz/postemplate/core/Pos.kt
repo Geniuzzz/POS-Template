@@ -1,10 +1,12 @@
 package com.geniuz.postemplate.core
 
 import androidx.lifecycle.LiveData
+import com.geniuz.postemplate.core.emv.CardReaderState
 import com.geniuz.postemplate.core.emv.EMVProcess
 import com.geniuz.postemplate.core.models.AID
 import com.geniuz.postemplate.core.models.CAPK
 import com.geniuz.postemplate.core.models.CardInfo
+import com.geniuz.postemplate.core.models.TransactionInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.security.MessageDigest
@@ -14,7 +16,7 @@ interface Pos {
 
     val emvProcessStateFlow: StateFlow<EMVProcess>
 
-    val cardInfoResultStateFlow: Flow<Result<CardInfo>>
+    val cardInfoResultStateFlow: Flow<CardReaderState>
 
     fun initialize()
 
@@ -24,7 +26,7 @@ interface Pos {
 
     suspend fun readCard()
 
-    fun startEmvProcess()
+    fun startEmvProcess(transactionInfo: TransactionInfo)
 
     fun printReceipt()
 
