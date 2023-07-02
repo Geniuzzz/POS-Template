@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 
-class TransactionProcessorImpl(
+abstract class TransactionProcessorImpl(
     private val pos: Pos,
 ) : TransactionProcessor {
 
@@ -20,14 +20,15 @@ class TransactionProcessorImpl(
     override val transactionStateFlow: StateFlow<TransactionState> = _transactionStateFlow
     private lateinit var transactionInfo: TransactionInfo
     override suspend fun observeCardReader() {
-        pos.cardInfoResultStateFlow.collectLatest { result ->
-            Log.d("XXXXX CARD INFO", "TP $result")
-            when (result) {
+        pos.cardReaderStateFlow.collectLatest { state ->
+            Log.d("XXXXX CARD INFO", "TP $state")
+            when (state) {
                 CardReaderState.Searching -> {
 
                 }
                 is CardReaderState.CardFound -> {
-                    when (result.cardInfo.cardSlotType) {
+                    transactionInfo = transactionInfo.copy(cardInfo = state.cardInfo)
+                    when (state.cardInfo.cardSlotType) {
                         CardSlotType.RF,
                         CardSlotType.ICC -> {
                             pos.startEmvProcess(transactionInfo)
@@ -44,7 +45,7 @@ class TransactionProcessorImpl(
 
                 is CardReaderState.OnError -> {
                     _transactionStateFlow.value =
-                        TransactionState.Error(result.error.message ?: "Failed to read card")
+                        TransactionState.Error(state.error.message ?: "Failed to read card")
                 }
             }
         }
@@ -77,6 +78,10 @@ class TransactionProcessorImpl(
                 }
                 is EMVProcess.OnPinEntered -> {
 
+                }
+                is EMVProcess.OnlineProcessRequired -> {
+                    _transactionStateFlow.value =
+                        TransactionState.OnlineRequired(emvProcess.transactionInfo)
                 }
                 EMVProcess.OnCtlsTapAgain -> TODO()
                 is EMVProcess.OnError -> TODO()
