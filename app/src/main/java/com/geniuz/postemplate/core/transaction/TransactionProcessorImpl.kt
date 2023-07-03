@@ -1,10 +1,12 @@
 package com.geniuz.postemplate.core.transaction
 
 import android.util.Log
-import com.geniuz.postemplate.TEST_AIDS
+import com.geniuz.postemplate.core.data.TEST_AIDS
 import com.geniuz.postemplate.core.Pos
 import com.geniuz.postemplate.core.emv.CardReaderState
 import com.geniuz.postemplate.core.emv.EMVProcess
+import com.geniuz.postemplate.core.models.AID
+import com.geniuz.postemplate.core.models.CAPK
 import com.geniuz.postemplate.core.models.CardSlotType
 import com.geniuz.postemplate.core.models.TransactionInfo
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +21,15 @@ abstract class TransactionProcessorImpl(
         MutableStateFlow(TransactionState.Init)
     override val transactionStateFlow: StateFlow<TransactionState> = _transactionStateFlow
     private lateinit var transactionInfo: TransactionInfo
+
+    override fun getAIDs(): List<AID> {
+        return TEST_AIDS
+    }
+
+    override fun getCAPKs(): List<CAPK> {
+        return emptyList()
+    }
+
     override suspend fun observeCardReader() {
         pos.cardReaderStateFlow.collectLatest { state ->
             Log.d("XXXXX CARD INFO", "TP $state")
@@ -57,7 +68,25 @@ abstract class TransactionProcessorImpl(
             Log.d("XXXXX EMVPROCESS", "TP $emvProcess")
             when (emvProcess) {
                 EMVProcess.Init -> {
-                    pos.loadAIDs(TEST_AIDS)
+
+                    if (getAIDs().isNotEmpty()) {
+                        val isAidLoaded = pos.loadAIDs(getAIDs())
+                        if (isAidLoaded.not()) {
+                            _transactionStateFlow.value =
+                                TransactionState.Error("Failed to load AIDs")
+                            return@collectLatest
+                        }
+                    }
+
+                    if (getCAPKs().isNotEmpty()) {
+                        val isCAPKLoaded = pos.loadCAPKs(getCAPKs())
+                        if (isCAPKLoaded.not()) {
+                            _transactionStateFlow.value =
+                                TransactionState.Error("Failed to load CAPKs")
+                            return@collectLatest
+                        }
+                    }
+
                     pos.readCard()
                 }
                 is EMVProcess.OnAppSelected -> {

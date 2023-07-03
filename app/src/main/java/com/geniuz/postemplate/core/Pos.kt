@@ -18,9 +18,9 @@ interface Pos {
 
     fun initialize()
 
-    fun loadCAPKs(pks: List<CAPK>)
+    fun loadCAPKs(pks: List<CAPK>): Boolean
 
-    fun loadAIDs(aids: List<AID>)
+    fun loadAIDs(aids: List<AID>): Boolean
 
     suspend fun readCard()
 

@@ -1,4 +1,4 @@
-package com.geniuz.postemplate
+package com.geniuz.postemplate.core.data
 
 import com.geniuz.postemplate.core.models.AID
 
