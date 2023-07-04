@@ -1,6 +1,6 @@
-package com.geniuz.postemplate.core.data
+package com.geniuz.postemplate.emv.core.data
 
-import com.geniuz.postemplate.core.models.AID
+import com.geniuz.postemplate.emv.core.models.AID
 
 val TEST_AIDS = listOf(
     AID(

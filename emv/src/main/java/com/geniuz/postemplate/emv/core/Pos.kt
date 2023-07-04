@@ -1,10 +1,10 @@
-package com.geniuz.postemplate.core
+package com.geniuz.postemplate.emv.core
 
-import com.geniuz.postemplate.core.emv.CardReaderState
-import com.geniuz.postemplate.core.emv.EMVProcess
-import com.geniuz.postemplate.core.models.AID
-import com.geniuz.postemplate.core.models.CAPK
-import com.geniuz.postemplate.core.models.TransactionInfo
+import com.geniuz.postemplate.emv.core.emv.CardReaderState
+import com.geniuz.postemplate.emv.core.emv.EMVProcess
+import com.geniuz.postemplate.emv.core.models.AID
+import com.geniuz.postemplate.emv.core.models.CAPK
+import com.geniuz.postemplate.emv.core.models.TransactionInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.security.MessageDigest

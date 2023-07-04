@@ -1,7 +1,7 @@
-package com.geniuz.postemplate.core.transaction
+package com.geniuz.postemplate.emv.core.transaction
 
-import com.geniuz.postemplate.core.models.CardApplication
-import com.geniuz.postemplate.core.models.TransactionInfo
+import com.geniuz.postemplate.emv.core.models.CardApplication
+import com.geniuz.postemplate.emv.core.models.TransactionInfo
 
 sealed class TransactionState {
     object Init : TransactionState()

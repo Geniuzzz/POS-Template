@@ -1,8 +1,8 @@
-package com.geniuz.postemplate.core.emv
+package com.geniuz.postemplate.emv.core.emv
 
-import com.geniuz.postemplate.core.models.CardApplication
-import com.geniuz.postemplate.core.models.CardInfo
-import com.geniuz.postemplate.core.models.TransactionInfo
+import com.geniuz.postemplate.emv.core.models.CardApplication
+import com.geniuz.postemplate.emv.core.models.CardInfo
+import com.geniuz.postemplate.emv.core.models.TransactionInfo
 
 sealed class EMVProcess {
     object Init: EMVProcess()

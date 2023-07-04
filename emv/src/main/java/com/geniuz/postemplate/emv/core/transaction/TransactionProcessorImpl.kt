@@ -1,14 +1,14 @@
-package com.geniuz.postemplate.core.transaction
+package com.geniuz.postemplate.emv.core.transaction
 
 import android.util.Log
-import com.geniuz.postemplate.core.data.TEST_AIDS
-import com.geniuz.postemplate.core.Pos
-import com.geniuz.postemplate.core.emv.CardReaderState
-import com.geniuz.postemplate.core.emv.EMVProcess
-import com.geniuz.postemplate.core.models.AID
-import com.geniuz.postemplate.core.models.CAPK
-import com.geniuz.postemplate.core.models.CardSlotType
-import com.geniuz.postemplate.core.models.TransactionInfo
+import com.geniuz.postemplate.emv.core.data.TEST_AIDS
+import com.geniuz.postemplate.emv.core.Pos
+import com.geniuz.postemplate.emv.core.emv.CardReaderState
+import com.geniuz.postemplate.emv.core.emv.EMVProcess
+import com.geniuz.postemplate.emv.core.models.AID
+import com.geniuz.postemplate.emv.core.models.CAPK
+import com.geniuz.postemplate.emv.core.models.CardSlotType
+import com.geniuz.postemplate.emv.core.models.TransactionInfo
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest

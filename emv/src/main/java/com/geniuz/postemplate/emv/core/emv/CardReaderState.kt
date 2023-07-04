@@ -1,6 +1,6 @@
-package com.geniuz.postemplate.core.emv
+package com.geniuz.postemplate.emv.core.emv
 
-import com.geniuz.postemplate.core.models.CardInfo
+import com.geniuz.postemplate.emv.core.models.CardInfo
 
 sealed class CardReaderState {
     object Searching : CardReaderState()

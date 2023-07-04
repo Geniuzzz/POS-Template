@@ -1,4 +1,4 @@
-package com.geniuz.postemplate.core.models
+package com.geniuz.postemplate.emv.core.models
 
 data class CardApplication(
     val aid: String,

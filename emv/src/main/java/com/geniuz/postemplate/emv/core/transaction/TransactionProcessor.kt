@@ -1,8 +1,8 @@
-package com.geniuz.postemplate.core.transaction
+package com.geniuz.postemplate.emv.core.transaction
 
-import com.geniuz.postemplate.core.models.AID
-import com.geniuz.postemplate.core.models.CAPK
-import com.geniuz.postemplate.core.models.TransactionInfo
+import com.geniuz.postemplate.emv.core.models.AID
+import com.geniuz.postemplate.emv.core.models.CAPK
+import com.geniuz.postemplate.emv.core.models.TransactionInfo
 import kotlinx.coroutines.flow.StateFlow
 
 interface TransactionProcessor {
