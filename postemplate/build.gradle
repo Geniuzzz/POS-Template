@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'com.geniuz.postemplate.emv'
+    namespace 'com.geniuz.postemplate'
     compileSdk 33
 
     defaultConfig {
