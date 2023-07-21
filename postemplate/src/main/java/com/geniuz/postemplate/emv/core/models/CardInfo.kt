@@ -7,5 +7,6 @@ data class CardInfo(
     val cardHolderName: String,
     val sequenceNumber: String,
     val iccData: String,
-    val cardSlotType: CardSlotType?
+    val cardSlotType: CardSlotType?,
+    val pinData: String? = null,
 )
