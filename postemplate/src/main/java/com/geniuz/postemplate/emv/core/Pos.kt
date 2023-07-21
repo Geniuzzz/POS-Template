@@ -16,7 +16,7 @@ interface Pos {
 
     val cardReaderStateFlow: Flow<CardReaderState>
 
-    fun initialize()
+    suspend fun initialize(): Boolean
 
     fun loadCAPKs(pks: List<CAPK>): Boolean
 

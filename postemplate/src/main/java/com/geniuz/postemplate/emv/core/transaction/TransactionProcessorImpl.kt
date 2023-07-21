@@ -68,26 +68,13 @@ abstract class TransactionProcessorImpl(
             Log.d("XXXXX EMVPROCESS", "TP $emvProcess")
             when (emvProcess) {
                 EMVProcess.Init -> {
-
-                    if (getAIDs().isNotEmpty()) {
-                        val isAidLoaded = pos.loadAIDs(getAIDs())
-                        if (isAidLoaded.not()) {
-                            _transactionStateFlow.value =
-                                TransactionState.Error("Failed to load AIDs")
-                            return@collectLatest
-                        }
+                    val isInitialized = pos.initialize()
+                    if (isInitialized){
+                       loadDeviceAndReadCard()
+                    }else{
+                        _transactionStateFlow.value =
+                            TransactionState.Error("Failed to Initialize Device")
                     }
-
-                    if (getCAPKs().isNotEmpty()) {
-                        val isCAPKLoaded = pos.loadCAPKs(getCAPKs())
-                        if (isCAPKLoaded.not()) {
-                            _transactionStateFlow.value =
-                                TransactionState.Error("Failed to load CAPKs")
-                            return@collectLatest
-                        }
-                    }
-
-                    pos.readCard()
                 }
                 is EMVProcess.OnAppSelected -> {
 
@@ -122,6 +109,28 @@ abstract class TransactionProcessorImpl(
                 }
             }
         }
+    }
+
+    private suspend fun loadDeviceAndReadCard(){
+        if (getAIDs().isNotEmpty()) {
+            val isAidLoaded = pos.loadAIDs(getAIDs())
+            if (isAidLoaded.not()) {
+                _transactionStateFlow.value =
+                    TransactionState.Error("Failed to load AIDs")
+                return
+            }
+        }
+
+        if (getCAPKs().isNotEmpty()) {
+            val isCAPKLoaded = pos.loadCAPKs(getCAPKs())
+            if (isCAPKLoaded.not()) {
+                _transactionStateFlow.value =
+                    TransactionState.Error("Failed to load CAPKs")
+                return
+            }
+        }
+
+        pos.readCard()
     }
 
     override fun selectApplication(index: Int) {
