@@ -136,4 +136,8 @@ abstract class TransactionProcessorImpl(
     override fun selectApplication(index: Int) {
         pos.selectApplicationPosition(index)
     }
+
+    override fun getICCData(): String {
+        return pos.getIccData()
+    }
 }

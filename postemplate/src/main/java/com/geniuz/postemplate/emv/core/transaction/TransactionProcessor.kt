@@ -18,4 +18,6 @@ interface TransactionProcessor {
     suspend fun startTransaction(transactionInfo: TransactionInfo)
 
     fun selectApplication(index: Int)
+
+    fun getICCData(): String
 }

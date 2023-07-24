@@ -29,6 +29,8 @@ interface Pos {
     fun printReceipt()
 
     fun selectApplicationPosition(index: Int)
+
+    fun getIccData(): String
 }
 
 fun main(){
