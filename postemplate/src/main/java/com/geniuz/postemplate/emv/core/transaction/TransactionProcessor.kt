@@ -14,9 +14,9 @@ interface TransactionProcessor {
 
     fun getCAPKs(): List<CAPK>
 
-    suspend fun observeCardReader(cardSlotTypes: List<CardSlotType>)
+    suspend fun startCardReading(cardSlotTypes: List<CardSlotType>)
 
-    suspend fun startTransaction(transactionInfo: TransactionInfo)
+    suspend fun startEMVProcess(transactionInfo: TransactionInfo)
 
     fun selectApplication(index: Int)
 

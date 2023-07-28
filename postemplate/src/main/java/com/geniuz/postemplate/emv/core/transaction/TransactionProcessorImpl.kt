@@ -29,7 +29,7 @@ abstract class TransactionProcessorImpl(
         return emptyList()
     }
 
-    override suspend fun observeCardReader(cardSlotTypes: List<CardSlotType>) {
+    override suspend fun startCardReading(cardSlotTypes: List<CardSlotType>) {
         pos.cardReaderStateFlow.collectLatest { state ->
             Log.d("XXXXX CARD INFO", "TP $state")
             when (state) {
@@ -54,7 +54,7 @@ abstract class TransactionProcessorImpl(
         }
     }
 
-    override suspend fun startTransaction(transactionInfo: TransactionInfo) {
+    override suspend fun startEMVProcess(transactionInfo: TransactionInfo) {
         pos.emvProcessStateFlow.collectLatest { emvProcess ->
             Log.d("XXXXX EMVPROCESS", "TP $emvProcess")
             when (emvProcess) {
