@@ -2,6 +2,7 @@ package com.geniuz.postemplate.emv.core.transaction
 
 import com.geniuz.postemplate.emv.core.models.AID
 import com.geniuz.postemplate.emv.core.models.CAPK
+import com.geniuz.postemplate.emv.core.models.CardSlotType
 import com.geniuz.postemplate.emv.core.models.TransactionInfo
 import kotlinx.coroutines.flow.StateFlow
 
@@ -13,7 +14,7 @@ interface TransactionProcessor {
 
     fun getCAPKs(): List<CAPK>
 
-    suspend fun observeCardReader()
+    suspend fun observeCardReader(cardSlotTypes: List<CardSlotType>)
 
     suspend fun startTransaction(transactionInfo: TransactionInfo)
 

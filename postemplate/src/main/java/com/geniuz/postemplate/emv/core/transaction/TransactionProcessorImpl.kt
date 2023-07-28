@@ -20,7 +20,6 @@ abstract class TransactionProcessorImpl(
     private val _transactionStateFlow: MutableStateFlow<TransactionState> =
         MutableStateFlow(TransactionState.Init)
     override val transactionStateFlow: StateFlow<TransactionState> = _transactionStateFlow
-    private lateinit var transactionInfo: TransactionInfo
 
     override fun getAIDs(): List<AID> {
         return TEST_AIDS
@@ -30,28 +29,21 @@ abstract class TransactionProcessorImpl(
         return emptyList()
     }
 
-    override suspend fun observeCardReader() {
+    override suspend fun observeCardReader(cardSlotTypes: List<CardSlotType>) {
         pos.cardReaderStateFlow.collectLatest { state ->
             Log.d("XXXXX CARD INFO", "TP $state")
             when (state) {
                 CardReaderState.Searching -> {
-
+                    val isInitialized = pos.initialize()
+                    if (isInitialized){
+                        loadDeviceAndReadCard(cardSlotTypes)
+                    }else{
+                        _transactionStateFlow.value =
+                            TransactionState.Error("Failed to Initialize Device")
+                    }
                 }
                 is CardReaderState.CardFound -> {
-                    transactionInfo = transactionInfo.copy(cardInfo = state.cardInfo)
-                    when (state.cardInfo.cardSlotType) {
-                        CardSlotType.RF,
-                        CardSlotType.ICC -> {
-                            pos.startEmvProcess(transactionInfo)
-                        }
-                        CardSlotType.SWIPE -> {
-
-                        }
-                        null -> {
-                            _transactionStateFlow.value =
-                                TransactionState.Error("Failed to read card")
-                        }
-                    }
+                    _transactionStateFlow.value = TransactionState.CardReady(state.cardInfo)
                 }
 
                 is CardReaderState.OnError -> {
@@ -63,18 +55,11 @@ abstract class TransactionProcessorImpl(
     }
 
     override suspend fun startTransaction(transactionInfo: TransactionInfo) {
-        this.transactionInfo = transactionInfo
         pos.emvProcessStateFlow.collectLatest { emvProcess ->
             Log.d("XXXXX EMVPROCESS", "TP $emvProcess")
             when (emvProcess) {
                 EMVProcess.Init -> {
-                    val isInitialized = pos.initialize()
-                    if (isInitialized){
-                       loadDeviceAndReadCard()
-                    }else{
-                        _transactionStateFlow.value =
-                            TransactionState.Error("Failed to Initialize Device")
-                    }
+                    pos.startEmvProcess(transactionInfo)
                 }
                 is EMVProcess.OnAppSelected -> {
 
@@ -93,11 +78,11 @@ abstract class TransactionProcessorImpl(
                     )
                 }
                 is EMVProcess.OnPinEntered -> {
-
+                    transactionInfo.cardInfo?.pinData = emvProcess.pinData
                 }
                 is EMVProcess.OnlineProcessRequired -> {
                     _transactionStateFlow.value =
-                        TransactionState.OnlineRequired(emvProcess.transactionInfo)
+                        TransactionState.OnlineRequired(transactionInfo)
                 }
                 EMVProcess.OnCtlsTapAgain -> TODO()
                 is EMVProcess.OnError -> TODO()
@@ -111,7 +96,7 @@ abstract class TransactionProcessorImpl(
         }
     }
 
-    private suspend fun loadDeviceAndReadCard(){
+    private suspend fun loadDeviceAndReadCard(cardSlotTypes: List<CardSlotType>){
         if (getAIDs().isNotEmpty()) {
             val isAidLoaded = pos.loadAIDs(getAIDs())
             if (isAidLoaded.not()) {
@@ -130,7 +115,7 @@ abstract class TransactionProcessorImpl(
             }
         }
 
-        pos.readCard()
+        pos.readCard(cardSlotTypes)
     }
 
     override fun selectApplication(index: Int) {
