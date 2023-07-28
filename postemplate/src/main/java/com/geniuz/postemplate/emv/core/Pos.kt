@@ -4,6 +4,7 @@ import com.geniuz.postemplate.emv.core.emv.CardReaderState
 import com.geniuz.postemplate.emv.core.emv.EMVProcess
 import com.geniuz.postemplate.emv.core.models.AID
 import com.geniuz.postemplate.emv.core.models.CAPK
+import com.geniuz.postemplate.emv.core.models.CardSlotType
 import com.geniuz.postemplate.emv.core.models.TransactionInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +23,7 @@ interface Pos {
 
     fun loadAIDs(aids: List<AID>): Boolean
 
-    suspend fun readCard()
+    suspend fun readCard(cardSlotTypes: List<CardSlotType>)
 
     fun startEmvProcess(transactionInfo: TransactionInfo)
 
