@@ -1,12 +1,12 @@
 package com.geniuz.postemplate.emv.core.models
 
 data class CardInfo(
-    val pan: String,
-    val expiry: String,
-    val track2: String,
-    val cardHolderName: String,
-    val sequenceNumber: String,
-    val iccData: String,
-    val cardSlotType: CardSlotType?,
-    val pinData: String? = null,
+    var pan: String,
+    var expiry: String,
+    var track2: String,
+    var cardHolderName: String,
+    var sequenceNumber: String,
+    var iccData: String,
+    var cardSlotType: CardSlotType?,
+    var pinData: String? = null,
 )
