@@ -2,10 +2,7 @@ package com.geniuz.postemplate.emv.core
 
 import com.geniuz.postemplate.emv.core.emv.CardReaderState
 import com.geniuz.postemplate.emv.core.emv.EMVProcess
-import com.geniuz.postemplate.emv.core.models.AID
-import com.geniuz.postemplate.emv.core.models.CAPK
-import com.geniuz.postemplate.emv.core.models.CardSlotType
-import com.geniuz.postemplate.emv.core.models.TransactionInfo
+import com.geniuz.postemplate.emv.core.models.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import java.security.MessageDigest
@@ -32,6 +29,8 @@ interface Pos {
     fun selectApplicationPosition(index: Int)
 
     fun getIccData(): String
+
+    fun injectKey(key: String, terminalKeyType: TerminalKeyType, index: Int): Boolean
 }
 
 fun main(){
